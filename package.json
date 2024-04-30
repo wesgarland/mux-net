@@ -1,0 +1,26 @@
+{
+  "name": "mux-net",
+  "version": "1.0.0",
+  "description": "network API for Servers that listen on many addresses",
+  "main": "mux-net.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wesgarland/mux-net.git"
+  },
+  "keywords": [
+    "node",
+    "net",
+    "multiple",
+    "server",
+    "ipv6"
+  ],
+  "author": "Wes Garland",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wesgarland/mux-net/issues"
+  },
+  "homepage": "https://github.com/wesgarland/mux-net#readme"
+}
