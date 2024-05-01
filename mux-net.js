@@ -16,11 +16,11 @@
  */
 'use strict';
 
-const nodeNet = require('node:net');
-const { EventEmitter } = require('node:events');
+const realServer = require('net').Server;
+const debug = require('debug');
+const { EventEmitter } = require('events');
 
 const $asyncDispose = Symbol.asyncDispose || new Symbol('asyncDispose' /* dummy for old node */);
-Object.assign(exports, nodeNet);
 
 /* API */
 exports.Server = Server;
@@ -32,6 +32,7 @@ function Server()
     return new Server(...arguments);
   EventEmitter.call(this);
   this._servers = [];
+  debug('mux-net')('new Server', ...arguments);
 }
 Server.prototype = Object.create(EventEmitter.prototype);
 Server.prototype.constructor = Server;
@@ -100,6 +101,7 @@ Server.prototype.listen = function Server$listen()
       options.hosts.push(options.host);
   }
 
+  debug('mux-net')('listen', options, callback?.name || typeof callback);
   if (!handle)
     this._finishListen(options, callback);
 
@@ -131,7 +133,13 @@ Server.prototype._finishListen = async function Server$_finishListen(options, ca
 
   for (let i = 0; i < ips.length; i++)
   {
-    const server = new nodeNet.Server(options);
+    const serverOptions = Object.assign({}, options);
+    const server = new realServer(serverOptions);
+
+    options.host = ips[i];
+    delete options.hosts;
+    debug('mux-net')(`listen ip #${i}:`, options.host);
+
     this._servers.push(server);
     server.on('listening', () => {
       this.listening = true;
