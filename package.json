@@ -4,7 +4,9 @@
   "description": "network API for Servers that listen on many addresses",
   "main": "mux-net.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postpublish": "npm-hooks/postpublish",
+    "prepublishOnly": "npm-hooks/prepublish"
   },
   "repository": {
     "type": "git",
