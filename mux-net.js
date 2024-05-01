@@ -25,6 +25,7 @@ const $asyncDispose = Symbol.asyncDispose || new Symbol('asyncDispose' /* dummy 
 /* API */
 exports.Server = Server;
 exports.createServer = createServer;
+exports.hook = () => Object.assign(require('net'), exports);
 
 function Server()
 {

@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/wesgarland/mux-net/issues"
   },
-  "homepage": "https://github.com/wesgarland/mux-net#readme"
+  "homepage": "https://github.com/wesgarland/mux-net#readme",
+  "dependencies": {
+    "debug": "^4.3.4"
+  }
 }
