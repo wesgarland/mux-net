@@ -10,9 +10,8 @@ TCP connections on multiple network interfaces.
 
 ### Theory of Operation
 Modules building services on top of TCP should be using the Node.js `net` module to create servers. When
-mux-net's hook() method is invoked, it replaces the Server and createServer exports from that module
-with its own. When other modules are loaded, they use these methods to create services, frequently 
-inheriting from Server.
+mux-net's hook() method is invoked, it replaces the Server export from that module with its own. When
+other modules are loaded, they use these methods to create services, frequently inheriting from Server.
 
 The Server class in mux-net has a listen method which invokes `listen()` one or more net::Server
 instances, and the listen callback is invoked on each of these as they become ready. Similarly, other

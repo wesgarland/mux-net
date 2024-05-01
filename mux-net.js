@@ -24,16 +24,18 @@ const $asyncDispose = Symbol.asyncDispose || new Symbol('asyncDispose' /* dummy 
 
 /* API */
 exports.Server = Server;
-exports.createServer = createServer;
 exports.hook = () => Object.assign(require('net'), exports);
 
-function Server()
+function Server(options, connectionListener)
 {
   if (!(this instanceof Server))
     return new Server(...arguments);
   EventEmitter.call(this);
   this._servers = [];
+  this._options = options || {};
   debug('mux-net')('new Server', ...arguments);
+  if (connectionListener)
+    this.on('connection', connectionListener);
 }
 Server.prototype = Object.create(EventEmitter.prototype);
 Server.prototype.constructor = Server;
@@ -135,7 +137,7 @@ Server.prototype._finishListen = async function Server$_finishListen(options, ca
   for (let i = 0; i < ips.length; i++)
   {
     const serverOptions = Object.assign({}, options);
-    const server = new realServer(serverOptions);
+    const server = new realServer(this._options);
 
     options.host = ips[i];
     delete options.hosts;
@@ -205,23 +207,7 @@ propMuxer('keepAlive');
 propMuxer('keepAliveInitialDelay');
 propMuxer('highWaterMark');
 
-/* API */
-function createServer(options, connectionListener)
-{
-  if (arguments.length === 0 || (arguments.length === 1 && typeof options === 'function'))
-  {
-    connectionListener = options;
-    options = {};
-  }
-  /* have finished handling polymorphism; options object and connectionListener are now authoritative */
-
-  const server = new Server(options);
-  if (connectionListener)
-    server.on('connection', connectionListener);
-
-  return server;
-}
-
+/* Multiplex props by writing to all net::Server instances but only reading from the first one */
 function propMuxer(prop)
 {
   Object.defineProperty(Server.prototype, prop, {
