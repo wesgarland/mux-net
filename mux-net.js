@@ -123,13 +123,15 @@ Server.prototype._finishListen = async function Server$_finishListen(options, ca
     if (!hostname)
       throw new Error('missing hostname in hosts array');
 
+    if (hostname === 'INADDR_ANY' || hostname === 'inaddr_any' || hostname === 'any/0')
+      hostname = '::';
+
     if (hostname.indexOf('::') !== -1 || hostname.match(/\.[0-9]+$/)) /* this is an IP number */
     {
       ips.push(hostname);
       continue;
     }
 
-    /** @todo: handle /etc/hosts along with dns */
     const hostEnts = await require('dns' /* actually resolv */).promises.lookup(hostname, { all: true });
     ips.push(...hostEnts.map(hostEnt => hostEnt.address));
   }

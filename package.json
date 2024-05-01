@@ -1,6 +1,6 @@
 {
   "name": "mux-net",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "network API for Servers that listen on many addresses",
   "main": "mux-net.js",
   "scripts": {
